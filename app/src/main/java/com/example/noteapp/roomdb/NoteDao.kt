@@ -11,10 +11,9 @@ import kotlinx.coroutines.flow.Flow
 
 @Dao
 interface NoteDao {
-
     @Query("SELECT * FROM Note")
-    fun getAllNotes(): Flow<List<Note>>
-        // LiveData or Flow
+     fun getAllNotes(): Flow<List<Note>>
+    // LiveData or Flow
 
     //Insert it only add new item but Upsert if items already exist then update the item.
     @Upsert

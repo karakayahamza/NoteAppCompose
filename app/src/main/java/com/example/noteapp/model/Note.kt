@@ -8,7 +8,6 @@ import java.util.Date
 
 @Entity
 data class Note(
-
     @PrimaryKey(autoGenerate = true)
     var id: Int? = null,
     @ColumnInfo(name = "text")
