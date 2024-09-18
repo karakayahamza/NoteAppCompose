@@ -1,4 +1,4 @@
-package com.example.noteapp.model
+package com.example.noteapp.data.model
 
 // Note.kt
 import androidx.room.ColumnInfo
@@ -15,9 +15,7 @@ data class Note(
     @ColumnInfo(name = "headline")
     var headline: String,
     @ColumnInfo(name = "date")
-    var date: Date
-) {
-//
-//    @PrimaryKey(autoGenerate = true)
-//    var id: Int = 0 // You can also do like that.
-}
+    var date: Date,
+    @ColumnInfo(name = "modificationDate")
+    var modificationDate: Date = Date()
+)

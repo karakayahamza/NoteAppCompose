@@ -1,6 +1,5 @@
-package com.example.noteapp
+package com.example.noteapp.data.remote
 
-import com.example.noteapp.roomdb.QuoteService
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 

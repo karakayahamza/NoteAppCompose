@@ -1,4 +1,4 @@
-package com.example.noteapp.model
+package com.example.noteapp.utils
 
 enum class Category {
     AGE, ALONE, AMAZING, ANGER, ARCHITECTURE, ART, ATTITUDE, BEAUTY, BEST, BIRTHDAY,

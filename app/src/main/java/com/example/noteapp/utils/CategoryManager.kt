@@ -1,11 +1,10 @@
-package com.example.noteapp
+package com.example.noteapp.utils
 
-import com.example.noteapp.model.Category
 import kotlin.random.Random
 
 class CategoryManager {
     companion object {
-        private val categories = Category.values()
+        private val categories = Category.entries.toTypedArray()
 
         fun getRandomCategory(): String {
             return categories[Random.nextInt(categories.size)].name.lowercase()

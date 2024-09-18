@@ -1,4 +1,4 @@
-package com.example.noteapp
+package com.example.noteapp.data.local
 import androidx.room.TypeConverter
 import java.util.Date
 

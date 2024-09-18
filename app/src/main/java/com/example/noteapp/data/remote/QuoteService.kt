@@ -1,6 +1,6 @@
-package com.example.noteapp.roomdb
+package com.example.noteapp.data.remote
 
-import com.example.noteapp.model.Quote
+import com.example.noteapp.data.model.Quote
 import retrofit2.http.GET
 import retrofit2.http.Header
 import retrofit2.http.Query
