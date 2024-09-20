@@ -1,4 +1,4 @@
-package com.example.noteapp
+package com.example.noteapp.ui.theme.state
 
 import com.example.noteapp.data.model.Note
 

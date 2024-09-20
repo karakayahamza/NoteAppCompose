@@ -1,16 +1,16 @@
 package com.example.noteapp.repository
 
 import androidx.lifecycle.LiveData
-import com.example.noteapp.NoteSortOrder
 import com.example.noteapp.data.local.NoteDao
 import com.example.noteapp.data.model.Note
-import com.example.noteapp.data.model.Quote
-import com.example.noteapp.data.remote.QuoteService
+import com.example.noteapp.data.model.NoteSortOrder
 import kotlinx.coroutines.flow.Flow
+import javax.inject.Inject
+import javax.inject.Singleton
 
-class NoteRepository(
-    private val noteDao: NoteDao,
-    private val quoteService: QuoteService
+@Singleton
+class NoteRepository @Inject constructor(
+    private val noteDao: NoteDao
 ) {
 
     fun getNotes(sortOrder: NoteSortOrder, isAscending: Boolean): Flow<List<Note>> {
@@ -31,10 +31,6 @@ class NoteRepository(
 
     suspend fun delete(note: Note) {
         noteDao.delete(note)
-    }
-
-    suspend fun getQuoteByCity(category: String, appId: String): List<Quote> {
-        return quoteService.getQuotes(category, appId)
     }
 }
 
