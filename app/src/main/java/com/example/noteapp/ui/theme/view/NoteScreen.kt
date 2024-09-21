@@ -32,6 +32,8 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
@@ -51,6 +53,7 @@ fun NoteScreen(noteViewModel: NoteViewModel, navController: NavController) {
     val noteState by noteViewModel.noteState.collectAsState()
     val isGridLayout by noteViewModel.isGridLayout.collectAsState()
     val sortOptions = NoteSortOrder.entries.toTypedArray()
+    val shouldShowDialog = remember { mutableStateOf(false) }
 
     LaunchedEffect(noteViewModel.currentSortOrder, noteViewModel.isAscending) {
         noteViewModel.fetchNotes(noteViewModel.currentSortOrder, noteViewModel.isAscending)
@@ -131,7 +134,8 @@ fun NoteScreen(noteViewModel: NoteViewModel, navController: NavController) {
                                     }
                                 }
                             } else {
-                                LazyColumn(modifier = Modifier.padding(8.dp)) {
+                                LazyColumn(modifier = Modifier.padding(8.dp),
+                                    verticalArrangement = Arrangement.spacedBy(8.dp)) {
                                     items(notes) { note ->
                                         NoteItem(
                                             navController = navController,

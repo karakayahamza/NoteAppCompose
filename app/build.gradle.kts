@@ -3,7 +3,6 @@ import java.util.Properties
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.jetbrains.kotlin.android)
-    alias(libs.plugins.ksp)
     id("com.google.dagger.hilt.android")
     kotlin("kapt")
 }
@@ -71,7 +70,6 @@ android {
 
 
 
-val room_version = "2.6.1"
 dependencies {
 
     implementation(libs.androidx.core.ktx)
@@ -95,39 +93,33 @@ dependencies {
     debugImplementation(libs.androidx.ui.test.manifest)
 
 
-    implementation("androidx.room:room-runtime:$room_version")
-    annotationProcessor("androidx.room:room-compiler:$room_version")
-
-    // To use Kotlin annotation processing tool (kapt)
-    kapt("androidx.room:room-compiler:$room_version")
+    implementation(libs.androidx.room.runtime)
+    annotationProcessor(libs.androidx.room.compiler)
+    kapt(libs.androidx.room.compiler)
 
     // optional - Kotlin Extensions and Coroutines support for Room
-    implementation("androidx.room:room-ktx:$room_version")
+    implementation(libs.androidx.room.ktx)
 
     // ViewModel utilities for Compose
     implementation(libs.androidx.lifecycle.viewmodel.compose)
 
     //Gson
-    implementation ("com.google.code.gson:gson:2.11.0")
+    implementation (libs.gson)
 
-    implementation ("com.squareup.retrofit2:retrofit:2.11.0")
-    implementation ("com.squareup.retrofit2:converter-gson:2.3.0")
+    implementation (libs.retrofit)
+    implementation (libs.converter.gson)
 
     //Navigation
-    implementation ("androidx.navigation:navigation-compose:2.7.1")
-    implementation ("androidx.lifecycle:lifecycle-runtime-compose:2.8.5")
+    implementation (libs.androidx.lifecycle.runtime.compose)
 
-    implementation("com.google.dagger:hilt-android:2.51.1")
-    kapt("com.google.dagger:hilt-android-compiler:2.51.1")
+    //Hilt
+    implementation(libs.hilt.android)
+    kapt(libs.hilt.android.compiler)
+    implementation(libs.androidx.hilt.work)
+    kapt(libs.androidx.hilt.compiler)
+    implementation(libs.androidx.hilt.navigation.compose)
 
-    implementation("androidx.hilt:hilt-work:1.0.0")
-    kapt("androidx.hilt:hilt-compiler:1.0.0")
-    implementation("androidx.hilt:hilt-navigation-compose:1.0.0")
-
-    implementation ("androidx.work:work-runtime-ktx:2.9.1")
-}
-ksp {
-    arg("room.schemaLocation", "$projectDir/schemas")
+    implementation (libs.androidx.work.runtime.ktx)
 }
 kapt {
     correctErrorTypes = true

@@ -1,13 +1,12 @@
 package com.example.noteapp.ui.theme.view
 
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material.icons.filled.Done
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
@@ -16,7 +15,10 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
+import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.material3.TopAppBar
+import androidx.compose.material3.TopAppBarDefaults
+import androidx.compose.material3.rememberTopAppBarState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
@@ -25,6 +27,8 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import com.example.noteapp.data.model.Note
@@ -40,13 +44,13 @@ fun NoteDetailScreen(
     var title by remember { mutableStateOf("") }
     var content by remember { mutableStateOf("") }
     val note by viewModel.note.observeAsState()
+    val scrollBehavior = TopAppBarDefaults.enterAlwaysScrollBehavior(rememberTopAppBarState())
 
     LaunchedEffect(noteId) {
         if (noteId != 0) {
             viewModel.getNoteById(noteId)
         } else {
-            // Yeni bir not eklenirken eski verileri sıfırlayın
-            viewModel.clearNote()  // viewModel'de notu sıfırlama fonksiyonu
+            viewModel.clearNote()
             title = ""
             content = ""
         }
@@ -61,9 +65,27 @@ fun NoteDetailScreen(
     }
 
     Scaffold(
+        modifier = Modifier.nestedScroll(scrollBehavior.nestedScrollConnection),
         topBar = {
             TopAppBar(
-                title = { Text(if (noteId == 0) "Create Note" else "Edit Note") },
+                title = {
+                    TextField(
+                        value = title,
+                        onValueChange = { title = it },
+                        label = { Text("Title") },
+                        modifier = Modifier.fillMaxWidth(),
+                        textStyle = MaterialTheme.typography.headlineSmall,
+
+                        colors = TextFieldDefaults.colors(
+                            disabledTextColor = Color.Black,
+                            focusedContainerColor = Color.Transparent,
+                            unfocusedContainerColor = Color.Transparent,
+                            focusedIndicatorColor = Color.Transparent,
+                            unfocusedIndicatorColor = Color.Transparent,
+                            disabledIndicatorColor = Color.Transparent
+                        )
+                    )
+                },
                 actions = {
                     IconButton(onClick = {
                         val newNote = if (noteId == 0) {
@@ -73,57 +95,69 @@ fun NoteDetailScreen(
                                 date = Calendar.getInstance().time,
                             )
                         } else {
-                            note?.copy(headline = title, text = content, modificationDate = Date())
+                            note?.copy(
+                                headline = title,
+                                text = content,
+                                modificationDate = Date()
+                            )
                         }
 
                         newNote?.let { viewModel.insert(it) }
 
                         navController.popBackStack()
-                    }, content = {
+                    }) {
                         Icon(
                             imageVector = Icons.Default.Done,
                             tint = MaterialTheme.colorScheme.primary,
                             contentDescription = "Save Button",
-                            modifier = Modifier
-                                .size(20.dp)
+                            modifier = Modifier.size(20.dp)
                         )
-                    })
-                }
+                    }
+                },
+                scrollBehavior = scrollBehavior,
+                navigationIcon = {
+                    IconButton(onClick = { navController.popBackStack() }) {
+                        Icon(
+                            imageVector = Icons.Default.ArrowBack,
+                            contentDescription = "Back"
+                        )
+                    }
+                },
             )
-        }
+        },
     ) { paddingValues ->
         Column(
             modifier = Modifier
                 .fillMaxSize()
                 .padding(paddingValues)
-                .padding(16.dp)
+                .padding(1.dp)
         ) {
-            if (noteId != 0 && note == null) {
-                Text(
-                    text = "Loading...",
-                    style = MaterialTheme.typography.bodyMedium
-                )
-            } else {
-                TextField(
-                    value = title,
-                    onValueChange = { title = it },
-                    label = { Text("Title") },
-                    modifier = Modifier.fillMaxWidth(),
-                    textStyle = MaterialTheme.typography.headlineSmall
-                )
-                Spacer(modifier = Modifier.height(8.dp))
+            Column {
+                if (noteId != 0 && note == null) {
+                    Text(
+                        text = "Loading...",
+                        style = MaterialTheme.typography.bodyMedium
+                    )
+                } else {
 
-                TextField(
-                    value = content,
-                    onValueChange = { content = it },
-                    label = { Text("Content") },
-                    modifier = Modifier
-                        .fillMaxSize()
-                        .weight(1f),
-                    textStyle = MaterialTheme.typography.bodyMedium,
-                    maxLines = Int.MAX_VALUE,
-                    singleLine = false
-                )
+                    TextField(
+                        value = content,
+                        onValueChange = { content = it },
+                        modifier = Modifier
+                            .fillMaxSize(),
+                        textStyle = MaterialTheme.typography.bodyMedium,
+                        maxLines = Int.MAX_VALUE,
+                        singleLine = false,
+                        colors = TextFieldDefaults.colors(
+                            disabledTextColor = Color.Black,
+                            focusedContainerColor = Color.Transparent,
+                            unfocusedContainerColor = Color.Transparent,
+                            focusedIndicatorColor = Color.Transparent,
+                            unfocusedIndicatorColor = Color.Transparent,
+                            disabledIndicatorColor = Color.Transparent
+                        ),
+                    )
+                }
             }
         }
     }

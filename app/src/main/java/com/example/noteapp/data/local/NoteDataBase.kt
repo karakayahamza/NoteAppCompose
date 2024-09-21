@@ -10,5 +10,3 @@ import com.example.noteapp.data.model.Note
 abstract class NoteDatabase : RoomDatabase() {
     abstract fun noteDao(): NoteDao
 }
-
-
