@@ -1,14 +1,13 @@
-package com.example.noteapp.ui.theme.viewmodel
+package com.example.noteapp.ui.viewmodels
 
 import android.app.Application
 import androidx.lifecycle.AndroidViewModel
-import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
-import com.example.noteapp.data.model.Note
-import com.example.noteapp.data.model.NoteSortOrder
+import com.example.noteapp.data.local.model.Note
+import com.example.noteapp.data.local.model.NoteSortOrder
 import com.example.noteapp.repository.NoteRepository
-import com.example.noteapp.ui.theme.state.NoteState
+import com.example.noteapp.ui.states.NoteState
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -26,10 +25,11 @@ class NoteViewModel @Inject constructor(
     private val _note = MutableLiveData<Note?>()
     val note: MutableLiveData<Note?> get() = _note
 
-    var currentSortOrder: NoteSortOrder = NoteSortOrder.DATE_DESC
-    var isAscending: Boolean = true
     private val _isGridLayout = MutableStateFlow(false)
     val isGridLayout: StateFlow<Boolean> get() = _isGridLayout
+
+    var currentSortOrder: NoteSortOrder = NoteSortOrder.DATE_DESC
+    var isAscending: Boolean = true
 
     init {
         fetchNotes(currentSortOrder, isAscending)
@@ -71,5 +71,3 @@ class NoteViewModel @Inject constructor(
         _note.value = null
     }
 }
-
-

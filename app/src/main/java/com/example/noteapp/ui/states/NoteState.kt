@@ -1,6 +1,6 @@
-package com.example.noteapp.ui.theme.state
+package com.example.noteapp.ui.states
 
-import com.example.noteapp.data.model.Note
+import com.example.noteapp.data.local.model.Note
 
 sealed class NoteState {
     data object Loading : NoteState()

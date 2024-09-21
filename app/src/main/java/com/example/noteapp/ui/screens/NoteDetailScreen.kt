@@ -1,4 +1,4 @@
-package com.example.noteapp.ui.theme.view
+package com.example.noteapp.ui.screens
 
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
@@ -31,8 +31,8 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
-import com.example.noteapp.data.model.Note
-import com.example.noteapp.ui.theme.viewmodel.NoteViewModel
+import com.example.noteapp.data.local.model.Note
+import com.example.noteapp.ui.viewmodels.NoteViewModel
 import java.util.Calendar
 import java.util.Date
 
@@ -72,7 +72,7 @@ fun NoteDetailScreen(
                     TextField(
                         value = title,
                         onValueChange = { title = it },
-                        label = { Text("Title") },
+                        label = { Text("Başlık") },
                         modifier = Modifier.fillMaxWidth(),
                         textStyle = MaterialTheme.typography.headlineSmall,
 
@@ -135,7 +135,7 @@ fun NoteDetailScreen(
             Column {
                 if (noteId != 0 && note == null) {
                     Text(
-                        text = "Loading...",
+                        text = "Yükleniyor...",
                         style = MaterialTheme.typography.bodyMedium
                     )
                 } else {

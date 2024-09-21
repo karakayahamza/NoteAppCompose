@@ -1,4 +1,4 @@
-package com.example.noteapp.data.model
+package com.example.noteapp.data.local.model
 
 enum class NoteSortOrder(val description: String) {
     DATE_DESC("Tarihe göre"),

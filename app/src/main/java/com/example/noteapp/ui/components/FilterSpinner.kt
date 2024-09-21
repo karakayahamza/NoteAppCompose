@@ -1,4 +1,4 @@
-package com.example.noteapp.ui.theme.composable
+package com.example.noteapp.ui.components
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -25,9 +25,9 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.unit.dp
-import com.example.noteapp.data.model.NoteSortOrder
+import com.example.noteapp.data.local.model.NoteSortOrder
 import com.example.noteapp.R
-import com.example.noteapp.ui.theme.viewmodel.NoteViewModel
+import com.example.noteapp.ui.viewmodels.NoteViewModel
 
 @Composable
 fun FilterSpinner(

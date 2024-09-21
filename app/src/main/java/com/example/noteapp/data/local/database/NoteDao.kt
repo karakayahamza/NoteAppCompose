@@ -1,4 +1,4 @@
-package com.example.noteapp.data.local
+package com.example.noteapp.data.local.database
 
 // NoteDao.kt
 import androidx.lifecycle.LiveData
@@ -7,8 +7,7 @@ import androidx.room.Delete
 import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
-import androidx.room.Upsert
-import com.example.noteapp.data.model.Note
+import com.example.noteapp.data.local.model.Note
 import kotlinx.coroutines.flow.Flow
 
 @Dao

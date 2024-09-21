@@ -1,4 +1,4 @@
-package com.example.noteapp.ui.theme.view
+package com.example.noteapp.ui.screens
 
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -32,8 +32,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
@@ -41,11 +39,11 @@ import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import com.example.noteapp.R
-import com.example.noteapp.data.model.NoteSortOrder
-import com.example.noteapp.ui.theme.composable.FilterSpinner
-import com.example.noteapp.ui.theme.composable.NoteItem
-import com.example.noteapp.ui.theme.state.NoteState
-import com.example.noteapp.ui.theme.viewmodel.NoteViewModel
+import com.example.noteapp.data.local.model.NoteSortOrder
+import com.example.noteapp.ui.components.FilterSpinner
+import com.example.noteapp.ui.components.NoteItem
+import com.example.noteapp.ui.states.NoteState
+import com.example.noteapp.ui.viewmodels.NoteViewModel
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -53,7 +51,6 @@ fun NoteScreen(noteViewModel: NoteViewModel, navController: NavController) {
     val noteState by noteViewModel.noteState.collectAsState()
     val isGridLayout by noteViewModel.isGridLayout.collectAsState()
     val sortOptions = NoteSortOrder.entries.toTypedArray()
-    val shouldShowDialog = remember { mutableStateOf(false) }
 
     LaunchedEffect(noteViewModel.currentSortOrder, noteViewModel.isAscending) {
         noteViewModel.fetchNotes(noteViewModel.currentSortOrder, noteViewModel.isAscending)
@@ -62,7 +59,7 @@ fun NoteScreen(noteViewModel: NoteViewModel, navController: NavController) {
     Scaffold(
         topBar = {
             TopAppBar(
-                title = { Text("Notes") },
+                title = { Text("Notlar") },
                 actions = {
                     Row(
                         horizontalArrangement = Arrangement.SpaceBetween,
@@ -93,7 +90,7 @@ fun NoteScreen(noteViewModel: NoteViewModel, navController: NavController) {
         floatingActionButton = {
             FloatingActionButton(
                 onClick = {
-                    navController.navigate("note_create") // noteId'yi sıfır olarak ele alacağız
+                    navController.navigate("note_create")
                 },
                 modifier = Modifier.padding(16.dp)
             ) {
@@ -134,8 +131,10 @@ fun NoteScreen(noteViewModel: NoteViewModel, navController: NavController) {
                                     }
                                 }
                             } else {
-                                LazyColumn(modifier = Modifier.padding(8.dp),
-                                    verticalArrangement = Arrangement.spacedBy(8.dp)) {
+                                LazyColumn(
+                                    modifier = Modifier.padding(8.dp),
+                                    verticalArrangement = Arrangement.spacedBy(8.dp)
+                                ) {
                                     items(notes) { note ->
                                         NoteItem(
                                             navController = navController,

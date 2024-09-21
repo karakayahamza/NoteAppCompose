@@ -1,6 +1,5 @@
-package com.example.noteapp.data.model
+package com.example.noteapp.data.local.model
 
-// Note.kt
 import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.PrimaryKey

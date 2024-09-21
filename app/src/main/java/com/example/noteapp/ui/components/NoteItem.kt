@@ -1,4 +1,4 @@
-package com.example.noteapp.ui.theme.composable
+package com.example.noteapp.ui.components
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
@@ -26,14 +26,10 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
-import androidx.compose.ui.draw.clipToBounds
-import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.RectangleShape
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
-import com.example.noteapp.data.model.Note
+import com.example.noteapp.data.local.model.Note
 
 @Composable
 fun NoteItem(
@@ -46,7 +42,11 @@ fun NoteItem(
 
     Box(
         modifier = modifier
-            .border(0.5.dp, MaterialTheme.colorScheme.primary,RoundedCornerShape(15.dp, 15.dp, 15.dp, 15.dp))
+            .border(
+                0.5.dp,
+                MaterialTheme.colorScheme.primary,
+                RoundedCornerShape(15.dp, 15.dp, 15.dp, 15.dp)
+            )
             .clickable {
                 navController.navigate("detail_screen/${note.id}")
             }
@@ -79,7 +79,7 @@ fun NoteItem(
             }
 
             IconButton(
-                onClick = { showDialog = true }, // Open dialog on click
+                onClick = { showDialog = true },
                 colors = IconButtonDefaults.iconButtonColors(
                     contentColor = MaterialTheme.colorScheme.primary
                 ),
@@ -90,7 +90,6 @@ fun NoteItem(
         }
     }
 
-    // Show alert dialog when showDialog is true
     if (showDialog) {
         AlertDialog(
             onDismissRequest = { showDialog = false },
@@ -98,7 +97,7 @@ fun NoteItem(
             confirmButton = {
                 TextButton(
                     onClick = {
-                        onDelete() // Call onDelete when confirmed
+                        onDelete()
                         showDialog = false
                     }
                 ) {

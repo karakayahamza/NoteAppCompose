@@ -1,9 +1,9 @@
 package com.example.noteapp.repository
 
 import androidx.lifecycle.LiveData
-import com.example.noteapp.data.local.NoteDao
-import com.example.noteapp.data.model.Note
-import com.example.noteapp.data.model.NoteSortOrder
+import com.example.noteapp.data.local.database.NoteDao
+import com.example.noteapp.data.local.model.Note
+import com.example.noteapp.data.local.model.NoteSortOrder
 import kotlinx.coroutines.flow.Flow
 import javax.inject.Inject
 import javax.inject.Singleton
@@ -33,4 +33,3 @@ class NoteRepository @Inject constructor(
         noteDao.delete(note)
     }
 }
-

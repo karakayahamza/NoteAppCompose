@@ -1,9 +1,9 @@
-package com.example.noteapp
+package com.example.noteapp.di
 
 import android.content.Context
 import androidx.room.Room
-import com.example.noteapp.data.local.NoteDao
-import com.example.noteapp.data.local.NoteDatabase
+import com.example.noteapp.data.local.database.NoteDao
+import com.example.noteapp.data.local.database.NoteDatabase
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn

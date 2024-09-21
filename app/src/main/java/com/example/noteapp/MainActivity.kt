@@ -11,9 +11,9 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.example.noteapp.ui.theme.NoteAppTheme
-import com.example.noteapp.ui.theme.view.NoteDetailScreen
-import com.example.noteapp.ui.theme.view.NoteScreen
-import com.example.noteapp.ui.theme.viewmodel.NoteViewModel
+import com.example.noteapp.ui.screens.NoteDetailScreen
+import com.example.noteapp.ui.screens.NoteScreen
+import com.example.noteapp.ui.viewmodels.NoteViewModel
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
