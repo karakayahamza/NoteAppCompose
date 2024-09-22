@@ -1,6 +1,8 @@
 package com.example.noteapp.ui.viewmodels
 
 import android.app.Application
+import android.content.Context
+import android.util.Log
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
@@ -18,6 +20,9 @@ import javax.inject.Inject
 class NoteViewModel @Inject constructor(
     private val noteRepository: NoteRepository, application: Application
 ) : AndroidViewModel(application) {
+    private val sharedPreferences =
+        application.getSharedPreferences("note_preferences", Context.MODE_PRIVATE)
+    private val editor = sharedPreferences.edit()
 
     private val _noteState = MutableStateFlow<NoteState>(NoteState.Loading)
     val noteState: StateFlow<NoteState> get() = _noteState
@@ -25,11 +30,11 @@ class NoteViewModel @Inject constructor(
     private val _note = MutableLiveData<Note?>()
     val note: MutableLiveData<Note?> get() = _note
 
-    private val _isGridLayout = MutableStateFlow(false)
+    private val _isGridLayout = MutableStateFlow(loadGridLayout())
     val isGridLayout: StateFlow<Boolean> get() = _isGridLayout
 
-    var currentSortOrder: NoteSortOrder = NoteSortOrder.DATE_DESC
-    var isAscending: Boolean = true
+    var currentSortOrder: NoteSortOrder = loadSortOrder()
+    var isAscending: Boolean = loadSortDirection()
 
     init {
         fetchNotes(currentSortOrder, isAscending)
@@ -63,11 +68,38 @@ class NoteViewModel @Inject constructor(
         }
     }
 
-    fun toggleLayout() {
-        _isGridLayout.value = !_isGridLayout.value
-    }
-
     fun clearNote() {
         _note.value = null
+    }
+
+    private fun loadGridLayout(): Boolean {
+        return sharedPreferences.getBoolean("isGridLayout", false)
+    }
+
+    private fun loadSortOrder(): NoteSortOrder {
+        val ordinal = sharedPreferences.getInt("sortOrder", NoteSortOrder.DATE_DESC.ordinal)
+        return NoteSortOrder.entries[ordinal]
+    }
+
+    private fun loadSortDirection(): Boolean {
+        return sharedPreferences.getBoolean("isAscending", true)
+    }
+
+
+    fun toggleLayout() {
+        _isGridLayout.value = !_isGridLayout.value
+        editor.putBoolean("isGridLayout", _isGridLayout.value).apply()
+        Log.d("NoteViewModel", "Grid Layout: ${_isGridLayout.value}")
+    }
+
+
+    fun setSortOrder(order: NoteSortOrder) {
+        currentSortOrder = order
+        editor.putInt("sortOrder", order.ordinal).apply()
+    }
+
+    fun setSortDirection(ascending: Boolean) {
+        isAscending = ascending
+        editor.putBoolean("isAscending", ascending).apply()
     }
 }

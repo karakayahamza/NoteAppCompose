@@ -65,7 +65,6 @@ fun NoteScreen(noteViewModel: NoteViewModel, navController: NavController) {
                         horizontalArrangement = Arrangement.SpaceBetween,
                         verticalAlignment = Alignment.CenterVertically
                     ) {
-
                         Icon(
                             imageVector = if (isGridLayout) ImageVector.vectorResource(id = R.drawable.linear_layout) else ImageVector.vectorResource(
                                 id = R.drawable.grid_layout
@@ -78,7 +77,6 @@ fun NoteScreen(noteViewModel: NoteViewModel, navController: NavController) {
                                     noteViewModel.toggleLayout()
                                 }
                         )
-
 
                         Spacer(modifier = Modifier.width(8.dp))
 

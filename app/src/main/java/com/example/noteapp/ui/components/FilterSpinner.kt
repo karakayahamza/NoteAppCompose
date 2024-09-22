@@ -16,6 +16,7 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -25,8 +26,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.unit.dp
-import com.example.noteapp.data.local.model.NoteSortOrder
 import com.example.noteapp.R
+import com.example.noteapp.data.local.model.NoteSortOrder
 import com.example.noteapp.ui.viewmodels.NoteViewModel
 
 @Composable
@@ -36,8 +37,14 @@ fun FilterSpinner(
     modifier: Modifier = Modifier,
 ) {
     var expanded by remember { mutableStateOf(false) }
-    var selectedOption by remember { mutableStateOf(options[0]) }
-    var isAscending by remember { mutableStateOf(true) }
+    var selectedOption by remember { mutableStateOf(viewModel.currentSortOrder) }
+    var isAscending by remember { mutableStateOf(viewModel.isAscending) }
+
+    // Load the selected option and direction from the view model
+    LaunchedEffect(viewModel.currentSortOrder, viewModel.isAscending) {
+        selectedOption = viewModel.currentSortOrder
+        isAscending = viewModel.isAscending
+    }
 
     Box(modifier = modifier) {
         Row(
@@ -66,11 +73,11 @@ fun FilterSpinner(
                 modifier = Modifier
                     .clickable {
                         isAscending = !isAscending
+                        viewModel.setSortDirection(isAscending)
                         viewModel.fetchNotes(selectedOption, isAscending)
                     }
                     .size(24.dp)
             )
-
         }
 
         DropdownMenu(
@@ -85,6 +92,7 @@ fun FilterSpinner(
                     onClick = {
                         selectedOption = selectionOption
                         expanded = false
+                        viewModel.setSortOrder(selectedOption)
                         viewModel.fetchNotes(selectedOption, isAscending)
                     },
                     text = {
