@@ -10,5 +10,3 @@ import com.example.noteapp.data.local.model.Note
 abstract class NoteDatabase : RoomDatabase() {
     abstract fun noteDao(): NoteDao
 }
-
-// Sadece class lar diğer class lardan inherit olabilir.

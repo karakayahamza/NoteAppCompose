@@ -1,4 +1,4 @@
-package com.example.noteapp.ui.screens
+package com.example.noteapp.presentation.ui.note_detail_screen
 
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
@@ -32,14 +32,14 @@ import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import com.example.noteapp.data.local.model.Note
-import com.example.noteapp.ui.viewmodels.NoteViewModel
+import com.example.noteapp.presentation.ui.viewmodels.NoteViewModel
 import java.util.Calendar
 import java.util.Date
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun NoteDetailScreen(
-    viewModel: NoteViewModel, noteId: Int, navController: NavController
+    viewModel: NoteViewModel, noteId: Int?, navController: NavController
 ) {
     var title by remember { mutableStateOf("") }
     var content by remember { mutableStateOf("") }
@@ -47,7 +47,7 @@ fun NoteDetailScreen(
     val scrollBehavior = TopAppBarDefaults.enterAlwaysScrollBehavior(rememberTopAppBarState())
 
     LaunchedEffect(noteId) {
-        if (noteId != 0) {
+        if (noteId != 0 && noteId != null) {
             viewModel.getNoteById(noteId)
         } else {
             viewModel.clearNote()
@@ -55,7 +55,6 @@ fun NoteDetailScreen(
             content = ""
         }
     }
-
 
     LaunchedEffect(note) {
         note?.let {
@@ -75,7 +74,6 @@ fun NoteDetailScreen(
                         label = { Text("Başlık") },
                         modifier = Modifier.fillMaxWidth(),
                         textStyle = MaterialTheme.typography.headlineSmall,
-
                         colors = TextFieldDefaults.colors(
                             disabledTextColor = Color.Black,
                             focusedContainerColor = Color.Transparent,
@@ -139,7 +137,6 @@ fun NoteDetailScreen(
                         style = MaterialTheme.typography.bodyMedium
                     )
                 } else {
-
                     TextField(
                         value = content,
                         onValueChange = { content = it },

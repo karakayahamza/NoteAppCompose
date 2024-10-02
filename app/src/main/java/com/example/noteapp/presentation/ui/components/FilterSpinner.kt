@@ -1,4 +1,4 @@
-package com.example.noteapp.ui.components
+package com.example.noteapp.presentation.ui.components
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -28,7 +28,7 @@ import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.unit.dp
 import com.example.noteapp.R
 import com.example.noteapp.data.local.model.NoteSortOrder
-import com.example.noteapp.ui.viewmodels.NoteViewModel
+import com.example.noteapp.presentation.ui.viewmodels.NoteViewModel
 
 @Composable
 fun FilterSpinner(
@@ -40,7 +40,6 @@ fun FilterSpinner(
     var selectedOption by remember { mutableStateOf(viewModel.currentSortOrder) }
     var isAscending by remember { mutableStateOf(viewModel.isAscending) }
 
-    // Load the selected option and direction from the view model
     LaunchedEffect(viewModel.currentSortOrder, viewModel.isAscending) {
         selectedOption = viewModel.currentSortOrder
         isAscending = viewModel.isAscending

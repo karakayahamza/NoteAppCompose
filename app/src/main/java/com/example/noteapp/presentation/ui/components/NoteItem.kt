@@ -1,4 +1,4 @@
-package com.example.noteapp.ui.components
+package com.example.noteapp.presentation.ui.components
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border

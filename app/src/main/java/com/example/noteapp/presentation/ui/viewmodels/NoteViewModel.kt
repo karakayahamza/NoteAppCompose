@@ -1,15 +1,13 @@
-package com.example.noteapp.ui.viewmodels
+package com.example.noteapp.presentation.ui.viewmodels
 
 import android.app.Application
-import android.content.Context
 import android.util.Log
-import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import com.example.noteapp.data.local.model.Note
 import com.example.noteapp.data.local.model.NoteSortOrder
-import com.example.noteapp.repository.NoteRepository
-import com.example.noteapp.ui.states.NoteState
+import com.example.noteapp.domain.repository.NoteRepository
+import com.example.noteapp.util.CustomSharedPreferences
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -18,14 +16,11 @@ import javax.inject.Inject
 
 @HiltViewModel
 class NoteViewModel @Inject constructor(
-    private val noteRepository: NoteRepository, application: Application
-) : AndroidViewModel(application) {
-    private val sharedPreferences =
-        application.getSharedPreferences("note_preferences", Context.MODE_PRIVATE)
-    private val editor = sharedPreferences.edit()
+    private val noteRepository: NoteRepository,
+    application: Application,
+    private val customSharedPreferences: CustomSharedPreferences,
+) : BaseViewModel(application) {
 
-    private val _noteState = MutableStateFlow<NoteState>(NoteState.Loading)
-    val noteState: StateFlow<NoteState> get() = _noteState
 
     private val _note = MutableLiveData<Note?>()
     val note: MutableLiveData<Note?> get() = _note
@@ -38,25 +33,36 @@ class NoteViewModel @Inject constructor(
 
     init {
         fetchNotes(currentSortOrder, isAscending)
+
     }
 
     fun insert(note: Note) = viewModelScope.launch {
-        noteRepository.insert(note)
-        fetchNotes(currentSortOrder, isAscending)
+        try {
+            noteRepository.insert(note)
+            fetchNotes(currentSortOrder, isAscending)
+        } catch (e: Exception) {
+            Log.d("Exeption", e.message ?: "Unknown error")
+        }
     }
 
+
     fun delete(note: Note) = viewModelScope.launch {
-        noteRepository.delete(note)
+        try {
+            noteRepository.delete(note)
+        } catch (e: Exception) {
+            Log.d("Exeption", e.message ?: "Unknown error")
+        }
     }
 
     fun fetchNotes(sortOrder: NoteSortOrder, isAscending: Boolean) = viewModelScope.launch {
-        _noteState.value = NoteState.Loading
+        setLoading()
         try {
             noteRepository.getNotes(sortOrder, isAscending).collect { notes ->
-                _noteState.value = NoteState.Success(notes)
+                setSuccess(notes)
             }
         } catch (e: Exception) {
-            _noteState.value = NoteState.Error(e)
+            setError(e)
+            Log.d("Exeption", e.message ?: "Unknown error")
         }
     }
 
@@ -73,33 +79,30 @@ class NoteViewModel @Inject constructor(
     }
 
     private fun loadGridLayout(): Boolean {
-        return sharedPreferences.getBoolean("isGridLayout", false)
+        return customSharedPreferences.getLayoutType() ?: false
     }
 
     private fun loadSortOrder(): NoteSortOrder {
-        val ordinal = sharedPreferences.getInt("sortOrder", NoteSortOrder.DATE_DESC.ordinal)
+        val ordinal = customSharedPreferences.getOrderType() ?: 0
         return NoteSortOrder.entries[ordinal]
     }
 
     private fun loadSortDirection(): Boolean {
-        return sharedPreferences.getBoolean("isAscending", true)
+        return customSharedPreferences.getIsAscending() ?: false
     }
-
 
     fun toggleLayout() {
         _isGridLayout.value = !_isGridLayout.value
-        editor.putBoolean("isGridLayout", _isGridLayout.value).apply()
-        Log.d("NoteViewModel", "Grid Layout: ${_isGridLayout.value}")
+        customSharedPreferences.saveIsGrid(_isGridLayout.value)
     }
-
 
     fun setSortOrder(order: NoteSortOrder) {
         currentSortOrder = order
-        editor.putInt("sortOrder", order.ordinal).apply()
+        customSharedPreferences.saveOrderType(order)
     }
 
     fun setSortDirection(ascending: Boolean) {
         isAscending = ascending
-        editor.putBoolean("isAscending", ascending).apply()
+        customSharedPreferences.saveIsAscending(ascending)
     }
 }

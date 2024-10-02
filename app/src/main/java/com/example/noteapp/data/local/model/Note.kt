@@ -7,6 +7,7 @@ import java.util.Date
 
 @Entity
 data class Note(
+    //Colum name is 'Note'
     @PrimaryKey(autoGenerate = true)
     var id: Int? = null,
     @ColumnInfo(name = "text")
@@ -17,4 +18,8 @@ data class Note(
     var date: Date,
     @ColumnInfo(name = "modificationDate")
     var modificationDate: Date = Date()
-)
+) {
+//    @PrimaryKey(autoGenerate = true)
+//    var id: Int? = null,
+// If you put it here. Upsert will not work. If you change anything in note it will effect to create a new note.
+}
